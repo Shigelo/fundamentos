@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyIA : MonoBehaviour
 {
@@ -15,12 +16,13 @@ public class EnemyIA : MonoBehaviour
     void Update()
     {
         Flip();
+        //Debug.Log("Se entro a Flip");
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) 
+    private void OnCollisionEnter2D(Collision2D other)  
     {
         Debug.Log("entro a condicion");
-        if(collision.gameObject.CompareTag("wall"))
+        if(other.gameObject.CompareTag("wall"))
         {
             if(flip)
             {
@@ -31,17 +33,21 @@ public class EnemyIA : MonoBehaviour
                 flip = true;
             }
         }
+        else if(other.gameObject.CompareTag("Player"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     void Flip()
     {
         if(flip)
         {
-            transform.Translate(2*Time.deltaTime * movementSpeed, 0, 0);
+            transform.Translate(2 * Time.deltaTime * movementSpeed, 0, 0);
         }
         else
         {
-            transform.Translate(-2 * Time.deltaTime * movementSpeed,0,0);
+            transform.Translate(-2 * Time.deltaTime * movementSpeed, 0, 0);
         }
     }
 }
